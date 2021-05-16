@@ -6,11 +6,11 @@ from skimage.transform import resize
 from typing import Tuple
 
 
-def read_images_to_df(file_location: str, pattern: str, target_size: Tuple[int, int]):
+def read_images(file_location: str, pattern: str, target_size: Tuple[int, int], num_of_records = -1):
     classes = []
     images = []
     with zipfile.ZipFile(file_location, 'r') as z:
-        i = 0
+        i = 1
         for file in z.namelist():
             if file.startswith(pattern):
                 ifile = z.open(file)
@@ -21,6 +21,8 @@ def read_images_to_df(file_location: str, pattern: str, target_size: Tuple[int, 
                 classes.append(ifile.name.split('/')[1])
                 images.append(image.ravel())
                 i += 1
+                if i == num_of_records:
+                    break
 
     image_matrix = np.stack(images)
     del images
