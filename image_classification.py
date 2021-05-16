@@ -16,6 +16,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MaxAbsScaler
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
 
 import zipfile
 from skimage.io import imread
@@ -25,10 +27,9 @@ from typing import Tuple
 from image_process.read_image_file import read_images, read_flowers
 
 
-def flow_images(train_data, targets):
+def flow_images(train_data, targets, dim_num=2, only_one=False):
 
     reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA']
-    dim_num = 2
     reductions = [
         umap.UMAP(n_components=dim_num),
         PCA(n_components=dim_num),
@@ -38,7 +39,7 @@ def flow_images(train_data, targets):
 
     classifieres_names = ['RBF SVM', 'Nearest Neighbors', 'Naive Bayes']
     classifieres = [
-        SVC(gamma='scale', C=1),
+        SVC(kernel='rbf', gamma='auto', class_weight='balanced', C=1e3),
         KNeighborsClassifier(3),
         GaussianNB()]
 
@@ -62,9 +63,19 @@ def flow_images(train_data, targets):
 
             clf.fit(train_food, train_target)
             print(f'unreduced score: {clf.score(test_food, test_target)}')
+            print(classification_report(test_target, clf.predict(test_food)))
+            print('')
 
             clf.fit(reduced_train, train_target)
             print(f'reduced score: {clf.score(reduced_test, test_target)}')
+            print(classification_report(test_target, clf.predict(reduced_test)))
+            print('')
+
+            if only_one:
+                break
+
+        if only_one:
+            break
 
 
 # target_food, images_food = read_images(
@@ -79,12 +90,12 @@ def flow_images(train_data, targets):
 # flow_images(images_food, target_food)
 
 target_flowers, images_target = read_flowers(
-    'data/raw_data/d4-flower_rec_i.zip', 'images/', (128, 128))
+    'data/raw_data/d4.zip', (128, 128))
 
 print('Encoding')
 le = LabelEncoder()
 le.fit(target_flowers)
-target_food = le.transform(target_food)
+target_flowers = le.transform(target_flowers)
 
 
-flow_images(images_target, target_food)
+flow_images(images_target, target_flowers, 30, True)
