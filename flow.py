@@ -25,7 +25,7 @@ def flow(train_data, targets, dim_num=2, cv=5, only_one=False) -> pd.DataFrame:
 
     results = pd.DataFrame(columns=['Reduction_method', 'Classificator', 'Unreduced_acc',
                                     'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time'])
-    reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA']
+    reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA'] # Dodać factor analysis i jedną własną 
     reductions = [
         umap.UMAP(n_components=dim_num),
         PCA(n_components=dim_num),
