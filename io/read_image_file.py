@@ -33,7 +33,7 @@ def read_images(file_location: str, file_format: str, image_size: Tuple[int, int
             if file.endswith(file_format):
                 ifile = z.open(file)
                 image = imread(ifile, as_gray=True)
-                if image.shape[0] != image_size[0] or image.shape[1] != image_size[1]:
+                if image.shape != image_size:
                     image = resize(image, image_size, anti_aliasing=True)
                 classes.append(take_class_name(ifile.name))
                 images.append(image.ravel())
