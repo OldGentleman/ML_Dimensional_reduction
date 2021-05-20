@@ -7,7 +7,6 @@ import seaborn as sns
 from matplotlib.colors import ListedColormap
 
 import umap
-from MulticoreTSNE import MulticoreTSNE as TSNE
 from sklearn.decomposition import PCA, KernelPCA
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 
@@ -17,17 +16,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble._forest import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import MaxAbsScaler
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import classification_report
-
-import zipfile
-from skimage.io import imread
-from skimage.transform import resize
-from typing import Tuple
-
-from image_process.read_image_file import read_images, read_flowers
 
 
 # train and targets - apart
@@ -91,29 +81,3 @@ def flow(train_data, targets, dim_num=2, cv=5, only_one=False) -> pd.DataFrame:
         if only_one:
             break
     return results.sort_values(by=['Classificator', 'Reduction_method'])
-# print('read food take a lot of memory')
-# target_food, images_food = read_images(
-#     'data/raw_data/d5 - food_rec_I.zip', 'images/', (512, 512))
-# flow_images(images_food, target_food)
-
-
-print('read flowers')
-target_flowers, images_target = read_flowers(
-    'data/raw_data/d4 - flower_rec_i.zip', (128, 128), 140)
-results_flowers = flow(images_target, target_flowers, dim_num=2, cv=5)
-print(results_flowers)
-
-# print('wine')
-# wine = pd.read_csv('data/preprocessed_data/wine.zip')
-# target = wine['target']
-# wine_train = wine.drop(columns=['target'])
-# results = flow(wine_train, target, 2, 5)
-# print(results)
-
-
-print('iris')
-data = pd.read_csv('data/preprocessed_data/iris.zip')
-target = data['target']
-data_train = data.drop(columns=['target'])
-results = flow(data_train, target, 2, 5)
-print(results)
