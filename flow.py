@@ -13,7 +13,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.neural_network import MLPClassifier
+#from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble._forest import RandomForestClassifier
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import cross_val_score
@@ -25,22 +25,24 @@ def flow(train_data, targets, dim_num=2, cv=5, only_one=False) -> pd.DataFrame:
 
     results = pd.DataFrame(columns=['Reduction_method', 'Classificator', 'Unreduced_acc',
                                     'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time'])
-    reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA'] # Dodać factor analysis i jedną własną 
+    # Dodać factor analysis i jedną własną
+    reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA']
     reductions = [
         umap.UMAP(n_components=dim_num),
         PCA(n_components=dim_num),
         KernelPCA(n_components=dim_num, kernel='rbf'),
-        LinearDiscriminantAnalysis(n_components=dim_num)
+        LinearDiscriminantAnalysis(n_components=dim_num),
+        #FactorAnalysis(n_components=dim_num, random_state=71)
     ]
 
     classifieres_names = ['RBF SVM', 'Nearest Neighbors',
-                          'Naive Bayes', 'Random Forest', 'Neural Network']
+                          'Naive Bayes', 'Random Forest']
     classifieres = [
         SVC(kernel='rbf', gamma='auto', class_weight='balanced', C=1e3),
         KNeighborsClassifier(3),
         GaussianNB(),
-        RandomForestClassifier(n_estimators=10, max_features=1),
-        MLPClassifier(alpha=1, max_iter=1000)]
+        RandomForestClassifier(n_estimators=10, max_features=1, random_state=71)]
+    # MLPClassifier(alpha=1, max_iter=1000)]
 
     i = 0
     for r_name, r_method in zip(reduction_names, reductions):

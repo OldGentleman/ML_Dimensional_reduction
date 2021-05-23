@@ -12,7 +12,7 @@ def read_images(number_of_records=None):
     return data_images
 
 
-nr_of_set = 7
+nr_of_set = 2
 
 params = [['../data/raw_data/d21 - KFC,McDonald_rec_I.zip',
            'jpg', (128, 128), 'd21', 100],
@@ -39,3 +39,7 @@ lib.read_images(file_location=params[nr_of_set][0],
                 image_size=params[nr_of_set][2],
                 set_name=params[nr_of_set][3],
                 num_of_records=params[nr_of_set][4])
+
+
+
+
