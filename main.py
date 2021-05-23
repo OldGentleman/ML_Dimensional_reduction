@@ -1,12 +1,17 @@
 import pandas as pd
 import numpy as np
 
+<<<<<<< HEAD
 from scipy.stats import ttest_ind
 
 #from image_process import read_image_file as rif
+=======
+>>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
 from flow import flow
+from read.read_all_data import read_all_preprocessed_data
 
 
+<<<<<<< HEAD
 # print('read food take a lot of memory')
 # target_food, images_food = read_images(
 #     'data/raw_data/d5 - food_rec_I.zip', 'images/', (512, 512))
@@ -39,3 +44,11 @@ train_iris = iris.drop(columns=['target'])
 results = flow(train_iris, labels_iris, 2, 5)
 print(results)
 
+=======
+random_state = 228
+
+
+for label, train, file_name in read_all_preprocessed_data():
+    results = flow(train, label, dim_num=2, cv=5, random_state=random_state)
+    results.to_csv(f'data/results/{file_name}_results.csv', index=False)
+>>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
