@@ -21,7 +21,8 @@ pd.set_option('display.max_columns', 100)
 
 # train and targets - apart
 def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False) -> pd.DataFrame:
-    train_data = train_data.to_numpy()
+    if isinstance(train_data, pd.DataFrame):
+        train_data = train_data.to_numpy()
 
     results = pd.DataFrame(columns=['Reduction_method', 'Classificator', 'Unreduced_acc',
                                     'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time', 'TT_reduction_stat', 'TT_reduction_p', 'TT_time_stat', 'TT_time_p'])

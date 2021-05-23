@@ -1,4 +1,6 @@
-import io.read_image_file as rif
+from os import listdir
+import pandas as pd
+import read.read_image_file as rif
 
 
 image_params = [['../data/raw_data/d21 - KFC,McDonald_rec_I.zip',
@@ -29,3 +31,21 @@ def read_images(number_of_records=None):
             file_location=param[0], file_format=param[1], image_size=param[2], set_name=param[3], num_of_records=param[4]))
 
     return data_images
+
+
+def read_preprocessed_data(set_name: str):
+    pass
+
+
+def read_all_preprocessed_data():
+    preprocessed_data = []
+    path = 'data/preprocessed_data'
+    for file_name in listdir(path):
+        data = pd.read_csv(f'{path}/{file_name}')
+        labels = data['target']
+        train_data = data.drop(columns=['target'])
+        train_data = train_data.to_numpy()
+
+        preprocessed_data.append((labels, train_data, file_name.split('.')[0]))
+
+    return preprocessed_data

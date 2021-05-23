@@ -89,4 +89,4 @@ def read_images(file_location: str, file_format: str, image_size: Tuple[int, int
     le.fit(classes)
     classes = le.transform(classes)
 
-    return classes,  image_matrix
+    return (classes,  image_matrix)
