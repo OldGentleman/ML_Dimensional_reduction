@@ -81,11 +81,7 @@ def read_images(file_location: str, file_format: str, image_size: Tuple[int, int
                 if i == num_of_records:
                     break
 
-<<<<<<< HEAD:io/read_image_file.py
-    print(images)
-=======
     # print(classes)
->>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a:read/read_image_file.py
 
     image_matrix = np.stack(images)
     del images
