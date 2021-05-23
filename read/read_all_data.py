@@ -3,6 +3,7 @@ import pandas as pd
 import read.read_image_file as rif
 
 
+
 image_params = [['../data/raw_data/d21 - KFC,McDonald_rec_I.zip',
                  'jpg', (128, 128), 'd21', 100],
                 ['../data/raw_data/d20 - hand_gestures_I.zip',
@@ -17,7 +18,7 @@ image_params = [['../data/raw_data/d21 - KFC,McDonald_rec_I.zip',
                  'png', (128, 128), 'd4', 100],
                 ['../data/raw_data/d3 - flower_rec_I.zip',
                  'jpg', (128, 128), 'd3', 100],
-                ['../data/raw_data/d1 - frut_rec_I.zip',
+                [path + '../data/raw_data/d1 - frut_rec_I.zip',
                  'jpg', (128, 128), 'd1', 100]
                 ]
 

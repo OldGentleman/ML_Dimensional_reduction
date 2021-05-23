@@ -27,31 +27,22 @@ for column in heart_attack_data_features.columns:
         heart_attack_data_features[column] = heart_attack_data_features[column].cat.codes
         #heart_attack_data_features[column] = pd.DataFrame((ohe.fit_transform(heart_attack_data_features[column])))
 
-
-heart_attack_data_train, heart_attack_data_test, heart_attack_data_train_targer, heart_attack_data_test_target=train_test_split(
-    heart_attack_data_features, heart_attack_data_target, test_size=.2, random_state=71)
-
-
-heart_attack_data_train_scaled=max_abs_scaler.fit_transform(
-    heart_attack_data_train)
-heart_attack_data_test_scaled=max_abs_scaler.fit_transform(
-    heart_attack_data_test)
-
-heart_attack_data_train_scaled=pd.DataFrame(
-    heart_attack_data_train_scaled, columns=heart_attack_data_train.columns)
-heart_attack_data_test_scaled=pd.DataFrame(
-    heart_attack_data_test_scaled, columns=heart_attack_data_test.columns)
+heart_attack_data_scaled=max_abs_scaler.fit_transform(
+    heart_attack_data_features)
 
 
-compression_train=dict(
-    method='zip', archive_name='d15 - hearth atack_train.zip')
+heart_attack_data_scaled=pd.DataFrame(
+    heart_attack_data_scaled, columns=heart_attack_data_features.columns)
 
-heart_attack_data_train_scaled.to_csv(
-    '../data/preprocessed_data/d15 - hearth atack_train.zip', index=False, compression=compression_train)
 
-compression_test=dict(method='zip', archive_name='d15 - hearth atack_test.zip')
+heart_attack_data_scaled['target'] = heart_attack_data_target
 
-heart_attack_data_test_scaled.to_csv(
-    '../data/preprocessed_data/d15 - hearth atack_test.zip', index=False, compression=compression_test)
+compression=dict(
+    method='zip', archive_name='d15 - hearth atack.csv')
+
+heart_attack_data_scaled.to_csv(
+    '../data/preprocessed_data/d15 - hearth atack.zip', index=False, compression=compression)
+
+
 
 print(heart_attack_data)

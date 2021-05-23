@@ -5,6 +5,7 @@ from sklearn.preprocessing import MaxAbsScaler
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
+le = preprocessing.LabelEncoder()
 zf = zipfile.ZipFile('../data/raw_data/d13 - fer2013.zip')
 print(zipfile.ZipFile.namelist(zf)[1])
 fer_data = pd.read_csv(
@@ -16,7 +17,7 @@ fer_data = fer_data.drop('Usage', axis='columns')
 
 
 
-fer_data_target = pd.get_dummies(fer_data.emotion)
+fer_data_target = fer_data['emotion']
 fer_data_features = fer_data.drop(
     'emotion', axis='columns')
 
@@ -29,31 +30,25 @@ for column in fer_data_features.columns:
             'category')
         fer_data_features[column] = fer_data_features[column].cat.codes
 
-fer_data_train, fer_data_test, fer_data_train_targer, fer_data_test_target=train_test_split(
-    fer_data_features, fer_data_target, test_size=.2, random_state=71)
+
+fer_data_scaled=max_abs_scaler.fit_transform(
+    fer_data_features)
 
 
-fer_data_train_scaled=max_abs_scaler.fit_transform(
-    fer_data_train)
-fer_data_test_scaled=max_abs_scaler.fit_transform(
-    fer_data_test)
+fer_data_scaled=pd.DataFrame(
+    fer_data_scaled, columns=fer_data_features.columns)
 
-fer_data_train_scaled=pd.DataFrame(
-    fer_data_train_scaled, columns=fer_data_train.columns)
-fer_data_test_scaled=pd.DataFrame(
-    fer_data_test_scaled, columns=fer_data_test.columns)
+fer_data_Y = le.fit_transform(fer_data_target)
 
 
-compression_train=dict(
-    method='zip', archive_name='d13 - fer_train.zip')
+fer_data_scaled['target'] = fer_data_Y
 
-fer_data_train_scaled.to_csv(
-    '../data/preprocessed_data/d13 - fer_train.csv', index=False, compression=compression_train)
+compression=dict(
+    method='zip', archive_name='d13 - fer.csv')
 
-compression_test=dict(method='zip', archive_name='d13 - fer_test.zip')
+fer_data_scaled.to_csv(
+    '../data/preprocessed_data/d13 - fer.zip', index=False, compression=compression)
 
-fer_data_test_scaled.to_csv(
-    '../data/preprocessed_data/d13 - fer_test.csv', index=False, compression=compression_test)
 
 
 print(fer_data_target)
