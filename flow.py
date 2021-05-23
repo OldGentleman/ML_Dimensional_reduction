@@ -1,4 +1,4 @@
-from scipy.stats import ttest_ind
+from scipy.stats import ttest_ind, wilcoxon
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
@@ -19,13 +19,17 @@ import pandas as pd
 pd.set_option('display.max_columns', 100)
 
 
+
+
 # train and targets - apart
 def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False) -> pd.DataFrame:
     if isinstance(train_data, pd.DataFrame):
         train_data = train_data.to_numpy()
 
     results = pd.DataFrame(columns=['Reduction_method', 'Classificator', 'Unreduced_acc',
-                                    'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time', 'TT_reduction_stat', 'TT_reduction_p', 'TT_time_stat', 'TT_time_p'])
+                                    'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time',
+                                    'TT_reduction_stat', 'TT_reduction_p', 'TT_time_stat', 'TT_time_p',
+                                    'Wilcoxon_reduction_stat', 'Wilcoxon_reduction_p', 'Wilcoxon_time_stat', 'Wilcoxon_time_p'])
 
     kf = KFold(n_splits=cv, shuffle=True, random_state=random_state)
 
@@ -101,12 +105,18 @@ def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False)
                 time_reduced.append(reduced_finish_time-reduced_start_time)
                 # print(f'reduced score: {reduced_score}')
 
+            # t-Student
             tt_score = ttest_ind(scores_unreduced, scores_reduced)
-            tt_time = ttest_ind(
-                time_unreduced, [x+y for x, y in zip(time_reduced, time_reduction)])
+            tt_time = ttest_ind(time_unreduced, time_reduced)
+            # Wilcoxon
+            w_score = wilcoxon(
+                [x-y for x, y in zip(scores_unreduced, scores_reduced)])
+            w_time = wilcoxon(
+                [x-y for x, y in zip(time_unreduced, time_reduced)])
             results.loc[i] = [r_name, clf_name, scores_unreduced,
                               scores_reduced, time_unreduced, time_reduced, time_reduction,
-                              tt_score[0], tt_score[1], tt_time[0], tt_time[1]]
+                              tt_score[0], tt_score[1], tt_time[0], tt_time[1],
+                              w_score[0], w_score[1], w_time[0], w_time[1]]
 
             i += 1
 
