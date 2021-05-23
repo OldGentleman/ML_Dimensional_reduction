@@ -16,28 +16,7 @@ import umap
 import time
 import numpy as np
 import pandas as pd
-<<<<<<< HEAD
-import time
-
-import matplotlib.pyplot as plt
-import seaborn as sns
-from matplotlib.colors import ListedColormap
-
-import umap
-from sklearn.decomposition import PCA, KernelPCA
-from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-
-from sklearn.svm import SVC
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.naive_bayes import GaussianNB
-#from sklearn.neural_network import MLPClassifier
-from sklearn.ensemble._forest import RandomForestClassifier
-from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import cross_val_score
-from sklearn.preprocessing import MaxAbsScaler
-=======
 pd.set_option('display.max_columns', 100)
->>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
 
 
 # train and targets - apart
@@ -46,15 +25,10 @@ def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False)
         train_data = train_data.to_numpy()
 
     results = pd.DataFrame(columns=['Reduction_method', 'Classificator', 'Unreduced_acc',
-<<<<<<< HEAD
-                                    'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time'])
-    # Dodać factor analysis i jedną własną
-=======
                                     'Reduced_acc', 'Clf_unreducted_time', 'Clf_reducted_time', 'Reduction_time', 'TT_reduction_stat', 'TT_reduction_p', 'TT_time_stat', 'TT_time_p'])
 
     kf = KFold(n_splits=cv, shuffle=True, random_state=random_state)
 
->>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
     reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA']
     reductions = [
         umap.UMAP(n_components=dim_num, random_state=random_state),
@@ -66,20 +40,12 @@ def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False)
 
     classifieres_names = ['RBF SVM', 'Nearest Neighbors',
                           'Naive Bayes', 'Random Forest']
-<<<<<<< HEAD
-=======
     #classifieres_names.append('Neural Network')
->>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
     classifieres = [
         SVC(kernel='rbf', gamma='auto', class_weight='balanced', C=1e3),
         KNeighborsClassifier(3),
         GaussianNB(),
-<<<<<<< HEAD
-        RandomForestClassifier(n_estimators=10, max_features=1, random_state=71)]
-    # MLPClassifier(alpha=1, max_iter=1000)]
-=======
         RandomForestClassifier(n_estimators=10, max_features=1, random_state=random_state)]
->>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
 
     #classifieres.append(MLPClassifier(alpha=1, max_iter=1000))
     i = 0
