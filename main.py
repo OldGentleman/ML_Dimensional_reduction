@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import warnings
+warnings.filterwarnings("ignore")
 
 <<<<<<< HEAD
 from scipy.stats import ttest_ind
@@ -49,6 +51,6 @@ random_state = 228
 
 
 for label, train, file_name in read_all_preprocessed_data():
-    results = flow(train, label, dim_num=2, cv=5, random_state=random_state)
+    results = flow(train, label, dim_num=2, cv=10, random_state=random_state)
     results.to_csv(f'data/results/{file_name}_results.csv', index=False)
 >>>>>>> 0874a4e8bc7cf5f982610c6a8654c5a47f66360a
