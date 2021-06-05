@@ -46,3 +46,17 @@ def read_all_preprocessed_data():
         preprocessed_data.append((labels, train_data, file_name.split('.')[0]))
 
     return preprocessed_data
+
+def read_iris_ibm_dataset():
+    preprocessed_data = []
+    path = 'data/preprocessed_data'
+    for file_name in listdir(path):
+        if file_name == 'iris.zip' or file_name == 'IBM.zip':
+            data = pd.read_csv(f'{path}/{file_name}')
+            labels = data['target']
+            train_data = data.drop(columns=['target'])
+            train_data = train_data.to_numpy()
+
+            preprocessed_data.append((labels, train_data, file_name.split('.')[0]))
+
+    return preprocessed_data
