@@ -127,3 +127,45 @@ def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False)
         if only_one:
             break
     return results.sort_values(by=['Classificator', 'Reduction_method'])
+
+def flow_for_pair(train_data, targets, r_method, clf, dim_num=2, cv=5, random_state=228):
+    kf = KFold(n_splits=cv, shuffle=True, random_state=random_state)
+    scores_reduced = []
+    scores_unreduced = []
+
+    time_reduced = []
+    time_unreduced = []
+    for train_index, test_index in kf.split(X=train_data, y=targets):
+        # cross split
+        X_train, X_test = train_data[train_index], train_data[test_index]
+        y_train, y_test = targets[train_index], targets[test_index]
+        # reduction
+        reduction_start_time = time.time()
+        X_train_reduced = r_method.fit_transform(X_train)
+        X_test_reduced = r_method.transform(X_test)
+        reduction_finish_time = time.time()
+
+        max_abs = MaxAbsScaler().fit(X_train_reduced)
+        X_train_reduced = max_abs.transform(X_train_reduced)
+        X_test_reduced = max_abs.transform(X_test_reduced)
+
+        # classification
+        # unreduced
+        unreduced_start_time = time.time()
+        clf.fit(X_train, y_train)
+        unreduced_finish_time = time.time()
+        scores_unreduced.append(
+            accuracy_score(y_test, clf.predict(X_test)))
+        time_unreduced.append(
+            unreduced_finish_time-unreduced_start_time)
+        # print(f'unreduced score: {unreduced_score}')
+
+        # reduced
+        reduced_start_time = time.time()
+        clf.fit(X_train_reduced, y_train)
+        reduced_finish_time = time.time()
+        scores_reduced.append(accuracy_score(
+            y_test, clf.predict(X_test_reduced)))
+        time_reduced.append(reduced_finish_time-reduced_start_time)
+    
+    return np.mean(scores_reduced)/np.mean(scores_unreduced), np.mean(time_reduced)/np.mean(time_unreduced)
