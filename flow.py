@@ -19,10 +19,10 @@ import pandas as pd
 pd.set_option('display.max_columns', 100)
 
 
-
-
 # train and targets - apart
 def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False) -> pd.DataFrame:
+    if isinstance(targets, pd.Series):
+        targets = np.array(targets.apply(lambda x: int(x)))
     if isinstance(train_data, pd.DataFrame):
         train_data = train_data.to_numpy()
 
@@ -33,11 +33,11 @@ def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False)
 
     kf = KFold(n_splits=cv, shuffle=True, random_state=random_state)
 
-    reduction_names = ['UMAP', 'PCA', 'KPCA', 'LDA']
+    reduction_names = ['UMAP', 'PCA',  'LDA']
     reductions = [
         umap.UMAP(n_components=dim_num, random_state=random_state),
-        PCA(n_components=dim_num),
-        KernelPCA(n_components=dim_num, kernel='rbf'),
+        PCA(n_components=dim_num, random_state=random_state),
+        # KernelPCA(n_components=dim_num, kernel='rbf', random_state=random_state),
         LinearDiscriminantAnalysis(n_components=dim_num),
         #FactorAnalysis(n_components=dim_num, random_state=71)
     ]
@@ -128,6 +128,7 @@ def flow(train_data, targets, dim_num=2, cv=5, random_state=228, only_one=False)
             break
     return results.sort_values(by=['Classificator', 'Reduction_method'])
 
+
 def flow_for_pair(train_data, targets, r_method, clf, dim_num=2, cv=5, random_state=228):
     kf = KFold(n_splits=cv, shuffle=True, random_state=random_state)
     scores_reduced = []
@@ -167,5 +168,5 @@ def flow_for_pair(train_data, targets, r_method, clf, dim_num=2, cv=5, random_st
         scores_reduced.append(accuracy_score(
             y_test, clf.predict(X_test_reduced)))
         time_reduced.append(reduced_finish_time-reduced_start_time)
-    
+
     return np.mean(scores_reduced)/np.mean(scores_unreduced), np.mean(time_reduced)/np.mean(time_unreduced)

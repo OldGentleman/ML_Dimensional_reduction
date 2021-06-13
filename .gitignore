@@ -1,0 +1,13 @@
+venv
+.idea
+*/preprocessed_data/*
+drafts
+data/*
+*/__pycache__/*
+*__pycache__*
+*__pycache__/*
+*/__pycache__*
+__pycache__
+kaka.py
+*.pyc
+read/__pycache__/read_image_file.cpython-38.pyc

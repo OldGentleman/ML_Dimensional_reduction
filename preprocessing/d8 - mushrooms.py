@@ -20,8 +20,8 @@ data = pd.read_csv(
 
 print(data)
 
-data_target = data['class']
-data_features = data.drop('class', axis='columns')
+data_target = data['cap-color']
+data_features = data.drop('cap-color', axis='columns')
 
 for column_name in data_features.columns:
     data_features[column_name] = data_features[column_name].astype('category')

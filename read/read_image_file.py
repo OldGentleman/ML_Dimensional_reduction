@@ -48,7 +48,7 @@ def take_d3_class_name(line: str) -> str:
 
 
 def take_d1_class_name(line: str) -> str:
-    return line.split('/')[2].split('_')[0]
+    return line.split('_')[0]
 
 
 sets_name = {

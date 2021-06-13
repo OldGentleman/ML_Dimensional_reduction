@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
 le = preprocessing.LabelEncoder()
-zf = zipfile.ZipFile('../data/raw_data/d13 - fer2013.zip')
+zf = zipfile.ZipFile('../data/raw_data/d13 - fer2013_I.zip')
 print(zipfile.ZipFile.namelist(zf)[1])
 fer_data = pd.read_csv(
     zf.open(zipfile.ZipFile.namelist(zf)[1]))
